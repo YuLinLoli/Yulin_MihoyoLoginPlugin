@@ -44,9 +44,12 @@ class MihoyoLoginQRcode {
                     event.subject.sendMessage("错误！post为空！")
                     return
                 }
+                if (post.contains("ExpiredCode")) {
+                    event.subject.sendMessage("二维码已过期，请重新登录!")
+                    return
+                }
                 val code = post.split("\"retcode\":")[1].split(",")[0].toInt()
                 val stat = post.split("\"stat\":\"")[1].split("\",")[0]
-
                 if (code != 0) {
                     event.subject.sendMessage("二维码已过期，请重新登录!")
                     return

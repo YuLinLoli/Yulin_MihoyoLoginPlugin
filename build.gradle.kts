@@ -16,7 +16,7 @@ buildConfig {
     className("BuildConfig")
     packageName("com.yulin.cg")
     buildConfigField("String", "yulinVersion", "\"${version}\"")
-    buildConfigField("String", "name", "\"米哈游登陆插件\"")
+    buildConfigField("String", "name", "\"米哈游登录插件\"")
     buildConfigField("String", "id", "\"com.yulin.MihoyoLoginPlugin\"")
 }
 repositories {
