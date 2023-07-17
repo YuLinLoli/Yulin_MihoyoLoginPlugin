@@ -39,7 +39,6 @@ class MihoyoLoginQRcode {
                     "https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/panda/qrcode/query",
                     "{\"app_id\":\"${MihoyoUtil.appId}\",\"device\":\"${qrCode[2]}\",\"ticket\":\"${ticket}\"}"
                 )
-
                 if (post == null) {
                     event.subject.sendMessage("错误！post为空！")
                     return
