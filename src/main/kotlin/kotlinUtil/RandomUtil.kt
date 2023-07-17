@@ -1,4 +1,4 @@
-package yulin.kotlinUtil
+package com.yulin.kotlinUtil
 
 import org.apache.commons.lang3.RandomStringUtils
 

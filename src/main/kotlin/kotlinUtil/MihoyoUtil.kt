@@ -1,9 +1,8 @@
-package yulin.kotlinUtil
+package com.yulin.kotlinUtil
 
-import com.alibaba.fastjson.JSON
-import net.mamoe.mirai.event.events.FriendMessageEvent
-import yulin.kotlinUtil.HttpRequestUtil.Companion.requestJsonPost
-import yulin.kotlinUtil.RandomUtil.Companion.randomStr
+
+import com.yulin.kotlinUtil.HttpRequestUtil.Companion.requestJsonPost
+import com.yulin.kotlinUtil.RandomUtil.Companion.randomStr
 
 class MihoyoUtil {
     companion object{
@@ -13,7 +12,8 @@ class MihoyoUtil {
                 "9ExXCdvqrn51qELbqj0XxtMTIpaCHFSI50PfPpTFV9Xt/hmyVwokoOXFlAEgCn+Q" +
                 "CgGs52bFoYMtyi+xEQIDAQAB" +
                 "-----END PUBLIC KEY-----"
-        suspend fun miHoYoLiginQRCode(){
+        //请求使用二维码登陆，并返回登陆的二维码以及ticket
+        suspend fun miHoYoLiginQRCode(): Array<String>{
             val device = randomStr(64)
             //请求获取登陆ticket
             val request = requestJsonPost(
@@ -21,11 +21,11 @@ class MihoyoUtil {
                 "{\"app_id\":\"${appId}\",\"device\":\"${device}\"}"
             )
 
-            println(request)
-            val url = request!!.split("{\"url\":\"")[1].split("\"}")[0]
-            println(url)
-            val ticket = url.split("icket=")[1]
-            println(ticket)
+            val qrUrl = request!!.split("{\"url\":\"")[1].split("\"}")[0].replace("\\u0026","&")
+
+            val ticket = qrUrl.split("icket=")[1]
+            return arrayOf(qrUrl,ticket,device)
         }
+
     }
 }

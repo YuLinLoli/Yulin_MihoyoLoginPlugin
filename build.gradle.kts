@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     val kotlinVersion = "1.8.0"
     kotlin("plugin.serialization") version kotlinVersion
@@ -9,22 +8,22 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version kotlinVersion
     id("com.github.gmazzo.buildconfig") version "4.1.1"
 }
-val yulinVersion = "1.0.1"
+val yulinVersion = "1.0.2"
 val name = "米哈游登陆插件${yulinVersion}"
-group = "yulin"
+group = "com.yulin"
 version = yulinVersion
 
 buildConfig{
     className("BuildConfig")
-    packageName("yulin.config")
+    packageName("com.yulin.config")
     buildConfigField("String","yulinVersion","\"${yulinVersion}\"")
     buildConfigField("String","name","\"${name}\"")
     buildConfigField("String","id","\"${group}\"")
 }
 repositories {
     mavenLocal()
-    maven("https://maven.aliyun.com/repository/gradle-plugin")
-    maven("https://maven.aliyun.com/repository/central")
+//    maven("https://maven.aliyun.com/repository/gradle-plugin")
+//    maven("https://maven.aliyun.com/repository/central")
     mavenCentral()
 }
 dependencies {
@@ -33,8 +32,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("net.mamoe:mirai-core-jvm:2.15.0-M1")
     implementation("top.jfunc.common:converter:1.8.0")
-
-
+    testImplementation ("junit:junit:4.13.2")
+    testImplementation ("org.jetbrains.kotlin:kotlin-test:1.8.0")
+    // https://mvnrepository.com/artifact/com.google.zxing/core
+    implementation("com.google.zxing:core:3.5.1")
     implementation("com.madgag:animated-gif-lib:1.4")
     compileOnly("org.bytedeco:javacv-platform:1.5.7")
 //    compileOnly
