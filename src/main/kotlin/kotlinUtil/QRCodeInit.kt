@@ -46,7 +46,7 @@ class QRCodeInit {
             logoHeigh: Int,
             logoPath: String,
             qrCodeColor: Int
-        ): ExternalResource {
+        ): ExternalResource? {
             /** 定义Map集合封装二维码配置信息 */
             val hints = HashMap<EncodeHintType, Any>()
             /** 设置二维码图片的内容编码 */
@@ -129,15 +129,27 @@ class QRCodeInit {
 
             val os = ByteArrayOutputStream()
 
-            withContext(Dispatchers.IO) {
-                ImageIO.write(image, "jpg", os)
+
+            try {
+                withContext(Dispatchers.IO) {
+                    ImageIO.write(image, "jpg", os)
+                }
+                return ByteArrayInputStream(os.toByteArray()).toExternalResource()
+            } catch (e: Exception) {
+                println("写出二维码文件到流错误！")
+                e.printStackTrace()
+                return null
+            } finally {
+                withContext(Dispatchers.IO) {
+                    os.close()
+                }
             }
+
+
             // ImageIO.write(bi, "jpg", new File(imagePath));
             //   File file = new File(imagePath);
             //  inputStream = new FileInputStream(file);
 
-
-            return ByteArrayInputStream(os.toByteArray()).toExternalResource()
 
         }
     }
