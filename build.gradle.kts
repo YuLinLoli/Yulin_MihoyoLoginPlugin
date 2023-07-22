@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.yulin"
-version = "1.0.2"
+version = "1.0.4"
 buildConfig {
     className("BuildConfig")
     packageName("com.yulin.cg")
@@ -30,13 +30,16 @@ dependencies {
     implementation("org.jsoup:jsoup:1.15.4")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("net.mamoe:mirai-core-jvm:2.15.0-M1")
-    implementation("top.jfunc.common:converter:1.8.0")
+    // https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
+    implementation("com.alibaba.fastjson2:fastjson2:2.0.35")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.8.0")
     // https://mvnrepository.com/artifact/com.google.zxing/core
     implementation("com.google.zxing:core:3.5.1")
     implementation("com.madgag:animated-gif-lib:1.4")
     compileOnly("org.bytedeco:javacv-platform:1.5.7")
+    // https://mvnrepository.com/artifact/org.hjson/hjson
+    implementation("org.hjson:hjson:3.0.0")
 //    compileOnly
     implementation(kotlin("stdlib-jdk8"))
 }
