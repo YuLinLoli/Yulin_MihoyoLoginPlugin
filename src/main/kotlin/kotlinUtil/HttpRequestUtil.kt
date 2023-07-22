@@ -3,6 +3,8 @@ package com.yulin.kotlinUtil
 import com.yulin.kotlinUtil.RandomUtil.Companion.randomStr
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import net.mamoe.mirai.utils.ExternalResource
+import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -46,7 +48,12 @@ class HttpRequestUtil {
             }
         }
 
-        suspend fun httpUrlToFile(url: String): File {
+        /**
+         * 通过URL将图片存到内存
+         * @param url 图片链接
+         * @return toExternalResource资源或者null
+         */
+        suspend fun httpUrlToFile(url: String): ExternalResource? {
             val httpUrl: HttpURLConnection = withContext(Dispatchers.IO) {
                 URL(url).openConnection()
             } as HttpURLConnection
@@ -64,19 +71,33 @@ class HttpRequestUtil {
             }
             val len = 8192
             val buffer = ByteArray(len)
-            val bytesRead = withContext(Dispatchers.IO) {
-                ins.read(buffer, 0, len)
-            }
-            while (bytesRead != -1) {
-                withContext(Dispatchers.IO) {
-                    os.write(buffer, 0, bytesRead)
-                    os.close()
-                    ins.close()
+            try {
+                val bytesRead = withContext(Dispatchers.IO) {
+                    ins.read(buffer, 0, len)
                 }
+                while (bytesRead != -1) {
+                    withContext(Dispatchers.IO) {
+                        os.write(buffer, 0, bytesRead)
+                        os.close()
+                        ins.close()
+                    }
+                }
+                return buffer.toExternalResource()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                println("文件输出错误！")
+                return null
             }
-            return file
+
+
         }
 
+        /**
+         * 获取并返回Json字符串（GET方法）为空时返回空字符串
+         * @param url URL链接地址
+         * @return responseData jsonString或者为空
+         * @author 岚雨凛 <cheng_ying@outlook.com>
+         */
         fun httpGet(url: String): String {
             val client = OkHttpClient().newBuilder().build()
             val request = Request.Builder()
@@ -91,15 +112,14 @@ class HttpRequestUtil {
                 return response.body?.string().toString()
             } catch (e: Exception) {
                 e.printStackTrace()
+                return ""
             } finally {
                 response?.close()
             }
 
-
-            return ""
         }
 
-        suspend fun mihoyoHttpRequest(url: String, jsonString: String, aigis: String): String? {
+        fun mihoyoHttpRequest(url: String, jsonString: String, aigis: String): String? {
             val client = OkHttpClient().newBuilder().build()
             val body = jsonString.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
             var response: Response? = null
