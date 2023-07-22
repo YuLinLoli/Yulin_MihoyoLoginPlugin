@@ -28,7 +28,7 @@ class MihoyoLoginQRcode {
             //根据二维码链接创建二维码
             val toExternalResource = qrCodeGenerate(qrLink, 300, 300, 90, 120, "null", 0x6495ED)
             //上传二维码图片
-            val image = toExternalResource.uploadAsImage(event.subject)
+            val image = toExternalResource!!.uploadAsImage(event.subject)
             //发送并提醒用户扫描二维码
             event.subject.sendMessage(image)
             event.subject.sendMessage("请扫描二维码登录！")
