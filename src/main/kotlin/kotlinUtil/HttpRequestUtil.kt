@@ -32,17 +32,17 @@ class HttpRequestUtil {
                 .build()
             val call = client.newCall(request)
             //返回请求结果
-            var response: Response? = null
+            val response: Response?
             return try {
                 response = call.execute()
-                response.body?.string()
+                response.use {
+                    it.body?.string()
+                }
 
             } catch (e: IOException) {
                 println("请求网址${uri}错误，JsonData为“${jsonString}”")
                 e.printStackTrace()
                 null
-            } finally {
-                response?.close()
             }
         }
 
@@ -65,13 +65,15 @@ class HttpRequestUtil {
             val len = 8192
             val buffer = ByteArray(len)
             val bytesRead = withContext(Dispatchers.IO) {
-                ins.read(buffer, 0, len)
+                ins.use {
+                    it.read(buffer, 0, len)
+                }
             }
             while (bytesRead != -1) {
                 withContext(Dispatchers.IO) {
-                    os.write(buffer, 0, bytesRead)
-                    os.close()
-                    ins.close()
+                    os.use {
+                        it.write(buffer, 0, bytesRead)
+                    }
                 }
             }
             return file
@@ -85,24 +87,25 @@ class HttpRequestUtil {
                 .build()
             val call = client.newCall(request)
             //返回请求结果
-            var response: Response? = null
-            try {
+            val response: Response?
+            return try {
                 response = call.execute()
-                return response.body?.string().toString()
+                response.use {
+                    it.body!!.string()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
-            } finally {
-                response?.close()
+                ""
             }
 
 
-            return ""
+
         }
 
-        suspend fun mihoyoHttpRequest(url: String, jsonString: String, aigis: String): String? {
+        fun mihoyoHttpRequest(url: String, jsonString: String, aigis: String): String? {
             val client = OkHttpClient().newBuilder().build()
             val body = jsonString.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
-            var response: Response? = null
+            val response: Response?
             try {
 
                 val request = Request.Builder()
@@ -126,14 +129,14 @@ class HttpRequestUtil {
                 val call = client.newCall(request)
                 //返回请求结果
                 response = call.execute()
-                return response.body?.string()
+                return response.use {
+                    it.body?.string()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
-            } finally {
-                response?.close()
+                return null
             }
 
-            return null
 
         }
     }

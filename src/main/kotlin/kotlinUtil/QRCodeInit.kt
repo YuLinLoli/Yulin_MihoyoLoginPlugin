@@ -13,7 +13,6 @@ import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.RenderingHints
 import java.awt.image.BufferedImage
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.imageio.ImageIO
@@ -132,12 +131,13 @@ class QRCodeInit {
             withContext(Dispatchers.IO) {
                 ImageIO.write(image, "jpg", os)
             }
+            
             // ImageIO.write(bi, "jpg", new File(imagePath));
             //   File file = new File(imagePath);
             //  inputStream = new FileInputStream(file);
-
-
-            return ByteArrayInputStream(os.toByteArray()).toExternalResource()
+            return os.use {
+                it.toByteArray().toExternalResource()
+            }
 
         }
     }
