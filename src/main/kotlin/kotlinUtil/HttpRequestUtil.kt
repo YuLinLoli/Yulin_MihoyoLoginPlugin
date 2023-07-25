@@ -85,8 +85,6 @@ class HttpRequestUtil {
         }
 
 
-        }
-
         /**
          * 获取并返回Json字符串（GET方法）为空时返回空字符串
          * @param url URL链接地址
@@ -111,7 +109,6 @@ class HttpRequestUtil {
                 e.printStackTrace()
                 ""
             }
-
 
 
         }
@@ -153,4 +150,5 @@ class HttpRequestUtil {
 
 
         }
+    }
 }
