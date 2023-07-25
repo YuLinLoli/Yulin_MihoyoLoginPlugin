@@ -131,7 +131,7 @@ class QRCodeInit {
             withContext(Dispatchers.IO) {
                 ImageIO.write(image, "jpg", os)
             }
-            
+
             // ImageIO.write(bi, "jpg", new File(imagePath));
             //   File file = new File(imagePath);
             //  inputStream = new FileInputStream(file);

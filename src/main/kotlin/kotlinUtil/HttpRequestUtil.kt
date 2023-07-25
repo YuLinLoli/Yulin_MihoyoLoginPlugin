@@ -46,6 +46,11 @@ class HttpRequestUtil {
             }
         }
 
+        /**
+         * 通过URL将图片存到内存
+         * @param url 图片链接
+         * @return File资源或者null
+         */
         suspend fun httpUrlToFile(url: String): File {
             val httpUrl: HttpURLConnection = withContext(Dispatchers.IO) {
                 URL(url).openConnection()
@@ -79,6 +84,15 @@ class HttpRequestUtil {
             return file
         }
 
+
+        }
+
+        /**
+         * 获取并返回Json字符串（GET方法）为空时返回空字符串
+         * @param url URL链接地址
+         * @return responseData jsonString或者为空
+         * @author 岚雨凛 <cheng_ying@outlook.com>
+         */
         fun httpGet(url: String): String {
             val client = OkHttpClient().newBuilder().build()
             val request = Request.Builder()
