@@ -10,17 +10,12 @@ import com.yulin.kotlinUtil.QRCodeInit.Companion.qrCodeGenerate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.mamoe.mirai.event.events.MessageEvent
+import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 
 class MihoyoLoginQRcode {
     companion object {
-        suspend fun qrCodeMain(event: MessageEvent) {
-            //查看是否匹配指令
-            if (!event.message.contentToString().contains("米哈游") && (!event.message.contentToString()
-                    .contains("登录") || event.message.contentToString().contains("登陆"))
-            ) {
-                return
-            }
+        suspend fun qrCodeMain(event: MessageEvent): Map<String, String>? {
             //获取QRcode相关数据
             val qrCode = miHoYoLiginQRCode()
             val qrLink = qrCode[0]
@@ -28,10 +23,16 @@ class MihoyoLoginQRcode {
             //根据二维码链接创建二维码
             val toExternalResource = qrCodeGenerate(qrLink, 300, 300, 90, 120, "null", 0x6495ED)
             //上传二维码图片
-            val image = toExternalResource!!.uploadAsImage(event.subject)
+            val image = toExternalResource.uploadAsImage(event.subject)
             //发送并提醒用户扫描二维码
-            event.subject.sendMessage(image)
-            event.subject.sendMessage("请扫描二维码登录！")
+
+            val message = MessageChainBuilder()
+                .append(image)
+                .append("请扫描二维码登录！")
+                .build()
+            event.subject.sendMessage(message)
+
+
             //关闭二维码相关资源
             withContext(Dispatchers.IO) {
                 toExternalResource.close()
@@ -52,12 +53,12 @@ class MihoyoLoginQRcode {
                 //如果返回状态为空则报错停止
                 if (post == null) {
                     event.subject.sendMessage("错误！post为空！")
-                    return
+                    return null
                 }
                 //如果包含ExpiredCode字符则二维码已过期停止
                 if (post.contains("ExpiredCode")) {
                     event.subject.sendMessage("二维码已过期，请重新登录!")
-                    return
+                    return null
                 }
                 //获取json对象
                 val jsonObject = JSONObject.parseObject(post)
@@ -68,7 +69,7 @@ class MihoyoLoginQRcode {
                 //如果包code不等于0，则二维码已过期！
                 if (code != 0) {
                     event.subject.sendMessage("二维码已过期，请重新登录!")
-                    return
+                    return null
                 }
                 //如果stat二维码状态为Scanned，则二维码已扫描等待用户确认登录
                 if (stat == "Scanned") {
@@ -104,7 +105,7 @@ class MihoyoLoginQRcode {
                 httpGet("https://api-takumi.mihoyo.com/auth/api/getCookieAccountInfoByGameToken?account_id=${data[0]}&game_token=${data[1]}")
             if (jsonPost == null) {
                 event.subject.sendMessage("错误！最后一步jsonPost报错！请联系插件作者或者机器人主人来处理此问题")
-                return
+                return null
             }
 
             val jsonPostJson = JSONObject.parseObject(jsonPost)["data"].toString()
@@ -117,9 +118,7 @@ class MihoyoLoginQRcode {
             val mid = JSONObject.parseObject(userInfo)["mid"].toString()
             val cookieToken = JSONObject.parseObject(httpGetJsonData)["cookie_token"].toString()
 
-            event.subject.sendMessage("ltoken=${token};ltuid=${aid};cookie_token=${cookieToken}")
-            event.subject.sendMessage("stoken=${token};stuid=${aid};mid=${mid}")
-            event.subject.sendMessage("登录完成，以上分别是 Cookie 和 Stoken，分别把两条消息逐条转发给 Bot 完成绑定!(Bot因为特殊原因不会发送绑定成功哦，可以直接在群里试试 #深渊 指令)")
+            return mapOf("token" to token, "aid" to aid, "mid" to mid, "cookieToken" to cookieToken)
         }
     }
 }

@@ -5,13 +5,13 @@ plugins {
     kotlin("plugin.serialization") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.allopen") version kotlinVersion
-    id("net.mamoe.mirai-console") version "2.15.0"
+    id("net.mamoe.mirai-console") version "2.16.0"
     id("org.jetbrains.kotlin.jvm") version kotlinVersion
     id("com.github.gmazzo.buildconfig") version "4.1.1"
 }
 
 group = "com.yulin"
-version = "1.0.4"
+version = "1.0.5"
 buildConfig {
     className("BuildConfig")
     packageName("com.yulin.cg")
@@ -26,10 +26,11 @@ repositories {
     mavenCentral()
 }
 dependencies {
+    implementation("com.google.code.gson:gson:2.9.1")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.jsoup:jsoup:1.15.4")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    implementation("net.mamoe:mirai-core-jvm:2.15.0-M1")
+    implementation("net.mamoe:mirai-core-jvm:2.16.0")
     // https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
     implementation("com.alibaba.fastjson2:fastjson2:2.0.35")
     testImplementation("junit:junit:4.13.2")

@@ -1,7 +1,7 @@
 package com.yulin
 
 import com.yulin.cg.BuildConfig
-import com.yulin.main.MihoyoLoginQRcode.Companion.qrCodeMain
+import com.yulin.main.MiHoYoSendMessage.Companion.qrCodeLogin
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.events.FriendMessageEvent
@@ -20,11 +20,11 @@ object MihoyoLoginPlugin : KotlinPlugin(
     override fun onEnable() {
         //监听私聊消息
         globalEventChannel().subscribeAlways<FriendMessageEvent> {
-            qrCodeMain(this)
+            qrCodeLogin(this)
         }
         //群临时会话消息
         globalEventChannel().subscribeAlways<GroupTempMessageEvent> {
-            qrCodeMain(this)
+            qrCodeLogin(this)
         }
     }
 
