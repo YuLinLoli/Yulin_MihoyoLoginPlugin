@@ -32,7 +32,9 @@ class MiHoYoDrawCardUrl {
                     .build()
                 val call = client.newCall(req)
                 val response = call.execute()
-                val loginCookieDataDtoBody = response.body?.string()
+                val loginCookieDataDtoBody = response.use {
+                    it.body?.string()
+                }
                 println("body====>${loginCookieDataDtoBody}")
                 val gson = Gson()
                 val loginCookieData = gson.fromJson(
@@ -52,8 +54,10 @@ class MiHoYoDrawCardUrl {
                     .build()
                 val multiCall = client.newCall(multiReq)
                 val multiResponse = multiCall.execute()
-                val multiDataDtoBody = multiResponse.body?.string()
-                println(multiDataDtoBody)
+                val multiDataDtoBody = multiResponse.use {
+                    it.body?.string()
+                }
+
                 val multiDataData = gson.fromJson(
                     multiDataDtoBody,
                     LoginTokenDto::class.java
@@ -71,7 +75,9 @@ class MiHoYoDrawCardUrl {
                     .build()
                 val uidCall = client.newCall(uidReq)
                 val uidResponse = uidCall.execute()
-                val uidDataDtoBody = uidResponse.body?.string()
+                val uidDataDtoBody = uidResponse.use {
+                    it.body?.string()
+                }
                 println("uidDataDtoBody:=>>>${uidDataDtoBody}")
                 val userGameRolesByCookieData = gson.fromJson(
                     uidDataDtoBody,
@@ -100,7 +106,9 @@ class MiHoYoDrawCardUrl {
                         .build()
                     val authKeyCall = client.newCall(authKeyReq)
                     val authKeyResponse = authKeyCall.execute()
-                    val authKeyDataDtoBody = authKeyResponse.body?.string()
+                    val authKeyDataDtoBody = authKeyResponse.use {
+                        it.body?.string()
+                    }
                     println(authKeyDataDtoBody)
                     val authKeyDataDto = gson.fromJson(
                         authKeyDataDtoBody,
@@ -116,7 +124,7 @@ class MiHoYoDrawCardUrl {
                                 "&game_version=CNRELiOS3.0.0_R10283122_S10446836_D10316937&plat_type=ios" +
                                 "&game_biz=${gameBiz}&size=20&authkey=${authKey}&region=${region}" +
                                 "&timestamp=1664481732&gacha_type=200&page=1&end_id=0"
-                    println(url)
+
 
                 }
                 return url

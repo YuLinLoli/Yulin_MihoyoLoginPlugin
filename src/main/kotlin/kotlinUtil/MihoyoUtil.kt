@@ -28,7 +28,6 @@ class MihoyoUtil {
             val qrUrl = JSONObject.parseObject(data)["url"].toString().replace("\\u0026", "&")
             //截取ticket
             val ticket = qrUrl.split("icket=")[1]
-            println(request)
             return arrayOf(qrUrl, ticket, device)
         }
 

@@ -23,7 +23,9 @@ class MihoyoLoginQRcode {
             //根据二维码链接创建二维码
             val toExternalResource = qrCodeGenerate(qrLink, 300, 300, 90, 120, "null", 0x6495ED)
             //上传二维码图片
-            val image = toExternalResource.uploadAsImage(event.subject)
+            val image = toExternalResource.use {
+                it.uploadAsImage(event.subject)
+            }
             //发送并提醒用户扫描二维码
 
             val message = MessageChainBuilder()
@@ -33,10 +35,6 @@ class MihoyoLoginQRcode {
             event.subject.sendMessage(message)
 
 
-            //关闭二维码相关资源
-            withContext(Dispatchers.IO) {
-                toExternalResource.close()
-            }
             //创建一个空的data数组用于之后放uid与token
             var data: Array<String> = arrayOf()
             //循环60次来进行每5秒一次的查询二维码状态
