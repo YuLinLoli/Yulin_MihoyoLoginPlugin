@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.yulin"
-version = "1.0.5"
+version = "1.0.6"
 buildConfig {
     className("BuildConfig")
     packageName("com.yulin.cg")
@@ -23,16 +23,27 @@ repositories {
     mavenLocal()
 //    maven("https://maven.aliyun.com/repository/gradle-plugin")
 //    maven("https://maven.aliyun.com/repository/central")
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
     mavenCentral()
+}
+mirai {
+    noTestCore = true
+    setupConsoleTestRuntime {
+        // 移除 mirai-core 依赖
+        classpath = classpath.filter {
+            !it.nameWithoutExtension.startsWith("mirai-core-jvm")
+        }
+    }
 }
 dependencies {
     implementation("com.google.code.gson:gson:2.9.1")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.jsoup:jsoup:1.15.4")
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("net.mamoe:mirai-core-jvm:2.16.0")
     // https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
     implementation("com.alibaba.fastjson2:fastjson2:2.0.35")
+    testConsoleRuntime("top.mrxiaom:overflow-core:2.16.0-d59ef26-SNAPSHOT")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.8.0")
     // https://mvnrepository.com/artifact/com.google.zxing/core
@@ -40,7 +51,7 @@ dependencies {
     implementation("com.madgag:animated-gif-lib:1.4")
     compileOnly("org.bytedeco:javacv-platform:1.5.7")
     // https://mvnrepository.com/artifact/org.hjson/hjson
-    implementation("org.hjson:hjson:3.0.0")
+    implementation("org.hjson:hjson:3.1.0")
 //    compileOnly
     implementation(kotlin("stdlib-jdk8"))
 }

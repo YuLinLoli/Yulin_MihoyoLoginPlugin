@@ -15,12 +15,11 @@ class MiHoYoSendMessage {
             event: MessageEvent
         ) {
             //查看是否匹配指令
-            if (!event.message.contentToString().contains("米哈游登录") && !event.message.contentToString()
-                    .contains("米哈游登陆")
+            if (!event.message.contentToString().contains("米哈游登录")
+                && !event.message.contentToString().contains("米哈游登陆")
             ) {
                 return
             }
-
             val data = qrCodeMain(event)
             val nodes = mutableListOf<ForwardMessage.Node>()
             nodes.add(
@@ -53,6 +52,7 @@ class MiHoYoSendMessage {
                     message = PlainText("登录完成，以上分别是 Cookie 和 Stoken，分别把两条消息逐条转发给 Bot 完成绑定!")
                 )
             )
+            println("MiHoYoLogin:成功执行token绑定！")
             val forward = RawForwardMessage(nodes).render(object : ForwardMessage.DisplayStrategy {
                 override fun generateTitle(forward: RawForwardMessage): String {
                     return "登录二维码"
